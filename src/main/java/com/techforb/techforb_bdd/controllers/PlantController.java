@@ -58,6 +58,14 @@ public class PlantController {
         }
 
         Plant existingPlant = existingPlantOpt.get();
+
+        boolean plantExists = plantService.plantExists(plant.getName(), plant.getCountry(), existingPlant.getUser().getId());
+
+        if (plantExists &&
+                (!existingPlant.getName().equals(plant.getName()) || !existingPlant.getCountry().equals(plant.getCountry()))) {
+            return new ResponseEntity<>("El usuario ya tiene una planta con ese nombre y país.", HttpStatus.CONFLICT);
+        }
+
         existingPlant.setName(plant.getName());
         existingPlant.setCountry(plant.getCountry());
 
